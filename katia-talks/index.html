@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kátia Talks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #05101f;
+      --surface:   #0d1f38;
+      --card:      #112240;
+      --border:    #1e3a5f;
+      --accent:    #2563eb;
+      --accent-lt: #3b82f6;
+      --glow:      #1d4ed8;
+      --text:      #e2e8f0;
+      --muted:     #94a3b8;
+      --white:     #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2.5rem;
+      background: rgba(5, 16, 31, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-lt), #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .9rem;
+      font-weight: 500;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: .55rem 1.2rem;
+      border-radius: 8px;
+      font-size: .875rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all .2s;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: var(--white);
+      box-shadow: 0 0 20px rgba(37,99,235,.35);
+    }
+    .btn-primary:hover {
+      background: var(--accent-lt);
+      box-shadow: 0 0 28px rgba(59,130,246,.5);
+      transform: translateY(-1px);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--accent-lt);
+      border: 1.5px solid var(--accent);
+    }
+    .btn-outline:hover {
+      background: rgba(37,99,235,.12);
+      transform: translateY(-1px);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 7rem 2.5rem 5rem;
+      text-align: center;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37,99,235,.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: rgba(37,99,235,.15);
+      border: 1px solid rgba(59,130,246,.35);
+      color: #93c5fd;
+      font-size: .78rem;
+      font-weight: 600;
+      padding: .35rem .9rem;
+      border-radius: 999px;
+      margin-bottom: 1.8rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      background: linear-gradient(135deg, #fff 30%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.2rem;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--white);
+      display: block;
+    }
+    .stat-label { font-size: .82rem; color: var(--muted); font-weight: 500; }
+
+    /* ── SECTIONS ── */
+    section { padding: 5rem 2.5rem; }
+    .section-tag {
+      display: inline-block;
+      background: rgba(37,99,235,.15);
+      color: #93c5fd;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: .3rem .8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(59,130,246,.25);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: .8rem;
+      letter-spacing: -.5px;
+    }
+    .section-sub {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 540px;
+      margin-bottom: 3rem;
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      margin: 0 2.5rem;
+    }
+
+    /* ── MOTIVATION CARDS ── */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      transition: transform .25s, border-color .25s, box-shadow .25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), #60a5fa);
+      opacity: 0;
+      transition: opacity .25s;
+    }
+    .card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 8px 40px rgba(37,99,235,.2); }
+    .card:hover::before { opacity: 1; }
+
+    .card-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+      background: rgba(37,99,235,.15);
+      border: 1px solid rgba(59,130,246,.25);
+    }
+    .card h3 { font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: .5rem; }
+    .card p  { font-size: .9rem; color: var(--muted); line-height: 1.6; }
+
+    /* ── CLIENTS ── */
+    #clientes { background: var(--surface); }
+    .clients-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .client-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.6rem;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .client-card:hover { border-color: var(--accent); box-shadow: 0 4px 24px rgba(37,99,235,.15); }
+    .manager {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 1.2rem;
+    }
+    .manager-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #60a5fa);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: .95rem;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .manager-name { font-weight: 600; font-size: .9rem; color: var(--white); }
+    .manager-role { font-size: .75rem; color: var(--muted); }
+    .client-list { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+    .client-list li {
+      display: flex; align-items: center; gap: .6rem;
+      font-size: .875rem; color: var(--muted);
+    }
+    .client-list li::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent-lt);
+      flex-shrink: 0;
+    }
+
+    /* ── PEOPLE ── */
+    .people-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .person-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: .85rem;
+      text-decoration: none;
+      transition: all .2s;
+    }
+    .person-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 20px rgba(37,99,235,.18); }
+    .person-avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e3a5f, #2563eb);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: .85rem;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .person-name { font-size: .85rem; font-weight: 600; color: var(--white); }
+    .linkedin-badge {
+      margin-left: auto;
+      font-size: .7rem;
+      color: #60a5fa;
+      background: rgba(37,99,235,.15);
+      padding: .2rem .5rem;
+      border-radius: 4px;
+    }
+
+    /* ── EVENTS ── */
+    #eventos { background: var(--surface); }
+    .events-list { display: flex; flex-direction: column; gap: 1rem; }
+    .event-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.4rem 1.8rem;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 1.5rem;
+      transition: all .2s;
+    }
+    .event-card:hover { border-color: var(--accent); box-shadow: 0 4px 24px rgba(37,99,235,.15); }
+    .event-date {
+      text-align: center;
+      background: rgba(37,99,235,.15);
+      border: 1px solid rgba(59,130,246,.25);
+      border-radius: 10px;
+      padding: .6rem 1rem;
+      min-width: 64px;
+    }
+    .event-date .day { font-size: 1.6rem; font-weight: 800; color: var(--white); line-height: 1; }
+    .event-date .month { font-size: .7rem; font-weight: 600; color: #93c5fd; text-transform: uppercase; letter-spacing: .05em; }
+    .event-info h4 { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: .25rem; }
+    .event-info p  { font-size: .85rem; color: var(--muted); }
+    .event-tags { display: flex; gap: .5rem; flex-wrap: wrap; }
+    .tag {
+      font-size: .72rem;
+      font-weight: 600;
+      padding: .25rem .65rem;
+      border-radius: 999px;
+      background: rgba(37,99,235,.18);
+      color: #93c5fd;
+      border: 1px solid rgba(59,130,246,.25);
+    }
+    .tag.green  { background: rgba(16,185,129,.15); color: #6ee7b7; border-color: rgba(16,185,129,.25); }
+    .tag.purple { background: rgba(139,92,246,.15); color: #c4b5fd; border-color: rgba(139,92,246,.25); }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--muted);
+    }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; opacity: .5; }
+    .empty-state p { font-size: 1rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2.5rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: .85rem;
+    }
+    footer span { color: var(--accent-lt); font-weight: 600; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(5,16,31,.85);
+      backdrop-filter: blur(6px);
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem;
+      width: min(480px, 90vw);
+      box-shadow: 0 24px 80px rgba(0,0,0,.5);
+    }
+    .modal h2 { font-size: 1.4rem; font-weight: 700; color: var(--white); margin-bottom: 1.5rem; }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-size: .82rem; font-weight: 600; color: var(--muted); margin-bottom: .4rem; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .65rem 1rem;
+      color: var(--white);
+      font-size: .9rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+      border-color: var(--accent);
+    }
+    .form-group textarea { resize: vertical; min-height: 90px; }
+    .modal-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .btn-ghost:hover { color: var(--white); border-color: var(--accent); }
+
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.2rem; }
+      .nav-links a { display: none; }
+      .hero { padding: 5rem 1.2rem 3rem; }
+      .hero-stats { gap: 1.5rem; }
+      section { padding: 3.5rem 1.2rem; }
+      .event-card { grid-template-columns: auto 1fr; }
+      .event-tags { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav>
+  <span class="nav-logo">✦ Kátia Talks</span>
+  <div class="nav-links">
+    <a href="#motivacao">Motivação</a>
+    <a href="#clientes">Clientes</a>
+    <a href="#pessoas">Pessoas</a>
+    <a href="#eventos">Eventos</a>
+    <button class="btn btn-primary" onclick="openModal()">＋ Novo Encontro</button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-badge">✦ Time Katia · CWI Software</div>
+  <h1>Kátia Talks</h1>
+  <p>Onde o conhecimento do time ganha voz — conectando pessoas, experiências e aprendizados.</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <a href="#eventos" class="btn btn-primary">Ver Eventos</a>
+    <a href="#motivacao" class="btn btn-outline">Saiba mais</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-num">150+</span><span class="stat-label">Colaboradores</span></div>
+    <div class="stat"><span class="stat-num">4</span><span class="stat-label">Gestores</span></div>
+    <div class="stat"><span class="stat-num">10+</span><span class="stat-label">Clientes</span></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── MOTIVAÇÃO ── -->
+<section id="motivacao">
+  <div class="section-tag">Por que fazemos isso</div>
+  <h2 class="section-title">Nossa motivação</h2>
+  <p class="section-sub">Compartilhar conhecimento é a forma mais poderosa de crescer juntos e fortalecer o time.</p>
+  <div class="cards-grid">
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <h3>Time Distribuído</h3>
+      <p>Mais de 150 colaboradores atuando em diferentes clientes, geografias e contextos. A troca aproxima quem está distante.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">💡</div>
+      <h3>Troca de Experiências</h3>
+      <p>Cada vivência em campo é uma lição única. Transformamos experiências individuais em crescimento coletivo.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🚀</div>
+      <h3>Evolução Contínua</h3>
+      <p>Aprendizado nunca para. Encontros regulares garantem que o time evolua junto, independente do projeto.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── CLIENTES ── -->
+<section id="clientes">
+  <div class="section-tag">Onde atuamos</div>
+  <h2 class="section-title">Nossos Clientes</h2>
+  <p class="section-sub">Colaboradores distribuídos por gestores em diferentes empresas parceiras.</p>
+  <div class="clients-grid">
+
+    <div class="client-card">
+      <div class="manager">
+        <div class="manager-avatar">RT</div>
+        <div>
+          <div class="manager-name">Rômulo Thomé Mendes</div>
+          <div class="manager-role">Gestor</div>
+        </div>
+      </div>
+      <ul class="client-list">
+        <li>Banco DLL</li>
+        <li>Brasil Tecpar</li>
+        <li>Frigelar</li>
+        <li>Onco Star</li>
+      </ul>
+    </div>
+
+    <div class="client-card">
+      <div class="manager">
+        <div class="manager-avatar">JF</div>
+        <div>
+          <div class="manager-name">Jennifer Von Berg Franchi</div>
+          <div class="manager-role">Gestora</div>
+        </div>
+      </div>
+      <ul class="client-list">
+        <li>DM</li>
+        <li>Banco ABC</li>
+      </ul>
+    </div>
+
+    <div class="client-card">
+      <div class="manager">
+        <div class="manager-avatar">CS</div>
+        <div>
+          <div class="manager-name">Carlos Eduardo dos Santos</div>
+          <div class="manager-role">Gestor</div>
+        </div>
+      </div>
+      <ul class="client-list">
+        <li>CIEE</li>
+        <li>Ouze</li>
+        <li>Sul América</li>
+      </ul>
+    </div>
+
+    <div class="client-card">
+      <div class="manager">
+        <div class="manager-avatar">FS</div>
+        <div>
+          <div class="manager-name">Fernando Spanhol</div>
+          <div class="manager-role">Gestor</div>
+        </div>
+      </div>
+      <ul class="client-list">
+        <li>Grupo Herval</li>
+        <li>Guarida Imóveis</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── PESSOAS ── -->
+<section id="pessoas">
+  <div class="section-tag">Recursos Humanos</div>
+  <h2 class="section-title">Nosso Time</h2>
+  <p class="section-sub">Profissionais conectados e prontos para compartilhar.</p>
+  <div class="people-grid" id="peopleGrid">
+    <!-- gerado via JS -->
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── EVENTOS ── -->
+<section id="eventos">
+  <div class="section-tag">Encontros</div>
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2rem;">
+    <div>
+      <h2 class="section-title" style="margin-bottom:.4rem;">Próximos Eventos</h2>
+      <p class="section-sub" style="margin-bottom:0;">Encontros mensais de compartilhamento de conhecimento.</p>
+    </div>
+    <button class="btn btn-primary" onclick="openModal()" style="flex-shrink:0;">＋ Novo Encontro</button>
+  </div>
+  <div class="events-list" id="eventsList">
+    <!-- gerado via JS -->
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <p>Feito com 💙 pelo time <span>Kátia</span> · CWI Software · 2025</p>
+</footer>
+
+<!-- ── MODAL NOVO ENCONTRO ── -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <h2>✦ Novo Encontro</h2>
+    <div class="form-group">
+      <label>Título do encontro</label>
+      <input type="text" placeholder="Ex: Boas práticas em React" id="eventTitle" />
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+      <div class="form-group">
+        <label>Data</label>
+        <input type="date" id="eventDate" />
+      </div>
+      <div class="form-group">
+        <label>Horário</label>
+        <input type="time" id="eventTime" value="17:00" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Apresentador(a)</label>
+      <input type="text" placeholder="Nome do apresentador" id="eventSpeaker" />
+    </div>
+    <div class="form-group">
+      <label>Categoria</label>
+      <select id="eventTag">
+        <option value="Tecnologia">Tecnologia</option>
+        <option value="Negócios">Negócios</option>
+        <option value="Carreira">Carreira</option>
+        <option value="Inovação">Inovação</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Descrição (opcional)</label>
+      <textarea placeholder="Sobre o que será o encontro..." id="eventDesc"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="addEvent()">Criar Encontro</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── PEOPLE ──
+  const people = [
+    { name: "Ana Lima",        initials: "AL", linkedin: "#" },
+    { name: "Bruno Carvalho",  initials: "BC", linkedin: "#" },
+    { name: "Carla Souza",     initials: "CS", linkedin: "#" },
+    { name: "Daniel Pereira",  initials: "DP", linkedin: "#" },
+    { name: "Eduarda Matos",   initials: "EM", linkedin: "#" },
+    { name: "Felipe Rocha",    initials: "FR", linkedin: "#" },
+    { name: "Gabriela Nunes",  initials: "GN", linkedin: "#" },
+    { name: "Henrique Costa",  initials: "HC", linkedin: "#" },
+    { name: "Isabela Ferreira",initials: "IF", linkedin: "#" },
+    { name: "João Alves",      initials: "JA", linkedin: "#" },
+    { name: "Karen Dias",      initials: "KD", linkedin: "#" },
+    { name: "Lucas Teixeira",  initials: "LT", linkedin: "#" },
+  ];
+
+  const grid = document.getElementById('peopleGrid');
+  people.forEach(p => {
+    grid.innerHTML += `
+      <a class="person-card" href="${p.linkedin}" target="_blank">
+        <div class="person-avatar">${p.initials}</div>
+        <span class="person-name">${p.name}</span>
+        <span class="linkedin-badge">in</span>
+      </a>`;
+  });
+
+  // ── EVENTS ──
+  const events = [
+    {
+      day: "28", month: "Mai", title: "Boas práticas em APIs REST",
+      speaker: "Bruno Carvalho", tags: [{ label: "Tecnologia", type: "" }]
+    },
+    {
+      day: "11", month: "Jun", title: "Agilidade na prática: lições do campo",
+      speaker: "Carla Souza", tags: [{ label: "Negócios", type: "green" }]
+    },
+    {
+      day: "25", month: "Jun", title: "IA no dia a dia do desenvolvedor",
+      speaker: "Felipe Rocha", tags: [{ label: "Inovação", type: "purple" }]
+    },
+  ];
+
+  function renderEvents() {
+    const list = document.getElementById('eventsList');
+    if (events.length === 0) {
+      list.innerHTML = `<div class="empty-state"><div class="icon">📅</div><p>Nenhum evento cadastrado ainda.<br>Clique em <strong>Novo Encontro</strong> para adicionar.</p></div>`;
+      return;
+    }
+    list.innerHTML = events.map(e => `
+      <div class="event-card">
+        <div class="event-date">
+          <div class="day">${e.day}</div>
+          <div class="month">${e.month}</div>
+        </div>
+        <div class="event-info">
+          <h4>${e.title}</h4>
+          <p>Apresentado por <strong>${e.speaker}</strong></p>
+        </div>
+        <div class="event-tags">
+          ${e.tags.map(t => `<span class="tag ${t.type}">${t.label}</span>`).join('')}
+        </div>
+      </div>`).join('');
+  }
+  renderEvents();
+
+  // ── MODAL ──
+  function openModal()  { document.getElementById('modalOverlay').classList.add('open'); }
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+  function handleOverlayClick(e) { if (e.target === e.currentTarget) closeModal(); }
+
+  function addEvent() {
+    const title   = document.getElementById('eventTitle').value.trim();
+    const date    = document.getElementById('eventDate').value;
+    const speaker = document.getElementById('eventSpeaker').value.trim();
+    const tag     = document.getElementById('eventTag').value;
+    if (!title || !date || !speaker) { alert('Preencha título, data e apresentador.'); return; }
+    const d   = new Date(date + 'T12:00:00');
+    const day = String(d.getDate()).padStart(2,'0');
+    const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    const month  = months[d.getMonth()];
+    const tagTypes = { 'Tecnologia':'', 'Negócios':'green', 'Carreira':'green', 'Inovação':'purple' };
+    events.push({ day, month, title, speaker, tags: [{ label: tag, type: tagTypes[tag] || '' }] });
+    events.sort((a, b) => {
+      const mi = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+      return mi.indexOf(a.month) - mi.indexOf(b.month) || Number(a.day) - Number(b.day);
+    });
+    renderEvents();
+    closeModal();
+    document.getElementById('eventTitle').value = '';
+    document.getElementById('eventDate').value  = '';
+    document.getElementById('eventSpeaker').value = '';
+  }
+</script>
+</body>
+</html>
