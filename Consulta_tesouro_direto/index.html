@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tesouro Direto</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3250;
+      --text: #e8eaf6;
+      --muted: #7b82b0;
+      --accent: #6c63ff;
+
+      --pos-fixado: #22c55e;
+      --pos-fixado-bg: #052e16;
+      --hibrido: #f59e0b;
+      --hibrido-bg: #292103;
+      --prefixado: #3b82f6;
+      --prefixado-bg: #0c1f40;
+      --renda: #ec4899;
+      --renda-bg: #3b0a23;
+      --educa: #a78bfa;
+      --educa-bg: #1e1040;
+    }
+
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header {
+      padding: 28px 40px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+    }
+
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-icon {
+      width: 40px; height: 40px; background: var(--accent); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; font-size: 20px;
+    }
+    .logo h1 { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.3px; }
+    .logo span { font-size: 0.8rem; color: var(--muted); display: block; font-weight: 400; }
+
+    .badge-data {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 20px; padding: 6px 14px; font-size: 0.78rem; color: var(--muted);
+    }
+    .badge-data strong { color: var(--text); }
+
+    main { padding: 32px 40px; max-width: 1400px; margin: 0 auto; }
+
+    .filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 28px; }
+    .filter-btn {
+      padding: 7px 18px; border-radius: 20px; border: 1px solid var(--border);
+      background: transparent; color: var(--muted); font-family: inherit;
+      font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all 0.15s;
+    }
+    .filter-btn:hover { border-color: var(--accent); color: var(--text); }
+    .filter-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    .stats {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 14px; margin-bottom: 32px;
+    }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; }
+    .stat-card .label { font-size: 0.75rem; color: var(--muted); margin-bottom: 4px; }
+    .stat-card .value { font-size: 1.4rem; font-weight: 700; }
+
+    .section-title {
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 1.2px;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 14px; padding-left: 4px;
+    }
+    .group { margin-bottom: 36px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px;
+      transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+      cursor: pointer;
+    }
+    .card:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 4px 24px #6c63ff18; }
+
+    .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+    .card-tipo { font-size: 0.9rem; font-weight: 600; line-height: 1.35; max-width: 70%; }
+    .card-venc { font-size: 0.72rem; color: var(--muted); }
+
+    .tag { font-size: 0.68rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+    .tag-Pós-fixado { background: var(--pos-fixado-bg); color: var(--pos-fixado); }
+    .tag-Híbrido    { background: var(--hibrido-bg);    color: var(--hibrido); }
+    .tag-Prefixado  { background: var(--prefixado-bg);  color: var(--prefixado); }
+    .tag-Renda      { background: var(--renda-bg);      color: var(--renda); }
+    .tag-Educa      { background: var(--educa-bg);      color: var(--educa); }
+
+    .divider { height: 1px; background: var(--border); margin: 12px 0; }
+    .card-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .metric .label { font-size: 0.68rem; color: var(--muted); margin-bottom: 2px; }
+    .metric .val { font-size: 1rem; font-weight: 600; }
+    .val-taxa { color: #22c55e; }
+    .val-pu   { color: var(--text); }
+
+    .card-simular {
+      margin-top: 14px; width: 100%;
+      padding: 8px; border-radius: 8px;
+      background: transparent; border: 1px solid var(--border);
+      color: var(--muted); font-family: inherit; font-size: 0.78rem;
+      font-weight: 500; cursor: pointer; transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .card-simular:hover { border-color: var(--accent); color: var(--accent); background: #6c63ff12; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: #000000bb;
+      display: flex; align-items: center; justify-content: center;
+      z-index: 100; padding: 20px;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 20px; width: 100%; max-width: 500px;
+      padding: 32px; position: relative;
+      transform: translateY(16px); transition: transform 0.2s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+
+    .modal-close {
+      position: absolute; top: 16px; right: 16px;
+      background: var(--surface2); border: 1px solid var(--border);
+      color: var(--muted); border-radius: 8px; width: 32px; height: 32px;
+      font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .modal-close:hover { color: var(--text); border-color: var(--accent); }
+
+    .modal-titulo { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+    .modal-sub { font-size: 0.78rem; color: var(--muted); margin-bottom: 20px; }
+
+    .modal-info {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px; margin-bottom: 24px;
+    }
+    .info-box {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; padding: 12px;
+    }
+    .info-box .lbl { font-size: 0.65rem; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .info-box .val { font-size: 0.92rem; font-weight: 600; }
+
+    .input-group { margin-bottom: 20px; }
+    .input-group label { font-size: 0.78rem; color: var(--muted); display: block; margin-bottom: 8px; }
+    .input-wrap { position: relative; }
+    .input-wrap span {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--muted); font-size: 0.9rem; font-weight: 500;
+    }
+    .input-wrap input {
+      width: 100%; padding: 12px 14px 12px 40px;
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text); font-family: inherit;
+      font-size: 1rem; font-weight: 600; outline: none; transition: border-color 0.15s;
+    }
+    .input-wrap input:focus { border-color: var(--accent); }
+    .input-wrap input::placeholder { color: var(--muted); font-weight: 400; }
+
+    .resultado {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px; margin-top: 4px;
+      display: none;
+    }
+    .resultado.show { display: block; }
+
+    .resultado-titulo {
+      font-size: 0.68rem; font-weight: 600; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+    }
+
+    .resultado-rows { display: flex; flex-direction: column; gap: 10px; }
+    .resultado-row {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .resultado-row .rlabel { font-size: 0.8rem; color: var(--muted); }
+    .resultado-row .rval   { font-size: 0.88rem; font-weight: 600; }
+
+    .resultado-destaque {
+      margin-top: 14px; padding-top: 14px;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .resultado-destaque .rlabel { font-size: 0.85rem; font-weight: 600; color: var(--text); }
+    .resultado-destaque .rval   { font-size: 1.3rem; font-weight: 700; color: #22c55e; }
+
+    .aliquota-badge {
+      font-size: 0.68rem; padding: 2px 8px; border-radius: 20px;
+      background: #292103; color: #f59e0b; font-weight: 600;
+    }
+
+    .aviso {
+      font-size: 0.7rem; color: var(--muted); margin-top: 14px;
+      padding-top: 12px; border-top: 1px solid var(--border); line-height: 1.5;
+    }
+
+    /* loading / error */
+    .state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 340px; gap: 14px; color: var(--muted); }
+    .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 600px) {
+      header, main { padding-left: 20px; padding-right: 20px; }
+      .cards { grid-template-columns: 1fr; }
+      .modal-info { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🏛️</div>
+    <div>
+      <h1>Tesouro Direto</h1>
+      <span>Títulos públicos federais</span>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div class="badge-data" id="badge-data">Carregando...</div>
+  </div>
+</header>
+
+<main>
+  <div class="stats" id="stats"></div>
+  <div class="filters" id="filters"></div>
+  <div id="content">
+    <div class="state"><div class="spinner"></div><span>Buscando dados...</span></div>
+  </div>
+</main>
+
+<!-- MODAL SIMULADOR -->
+<div class="modal-overlay" id="modal-overlay" onclick="fecharModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="fecharModalDireto()">✕</button>
+
+    <div class="modal-titulo" id="m-titulo"></div>
+    <div class="modal-sub" id="m-sub"></div>
+
+    <div class="modal-info">
+      <div class="info-box">
+        <div class="lbl">Taxa a.a.</div>
+        <div class="val" id="m-taxa" style="color:#22c55e"></div>
+      </div>
+      <div class="info-box">
+        <div class="lbl">Preço unitário</div>
+        <div class="val" id="m-pu"></div>
+      </div>
+      <div class="info-box">
+        <div class="lbl">Prazo</div>
+        <div class="val" id="m-prazo"></div>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label>Quanto deseja investir?</label>
+      <div class="input-wrap">
+        <span>R$</span>
+        <input type="number" id="input-valor" min="30" step="1"
+          placeholder="1.000,00" oninput="simular()" />
+      </div>
+    </div>
+
+    <div class="resultado" id="resultado">
+      <div class="resultado-titulo">Projeção no vencimento</div>
+      <div class="resultado-rows">
+        <div class="resultado-row">
+          <span class="rlabel">Valor investido</span>
+          <span class="rval" id="r-investido"></span>
+        </div>
+        <div class="resultado-row">
+          <span class="rlabel">Valor bruto</span>
+          <span class="rval" id="r-bruto"></span>
+        </div>
+        <div class="resultado-row">
+          <span class="rlabel">Rendimento bruto</span>
+          <span class="rval" id="r-rendimento" style="color:#22c55e"></span>
+        </div>
+        <div class="resultado-row">
+          <span class="rlabel">IR <span class="aliquota-badge" id="r-aliquota"></span></span>
+          <span class="rval" id="r-ir" style="color:#f87171"></span>
+        </div>
+      </div>
+      <div class="resultado-destaque">
+        <span class="rlabel">Valor líquido</span>
+        <span class="rval" id="r-liquido"></span>
+      </div>
+      <div class="aviso" id="r-aviso"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const CORES = {
+    "Pós-fixado": "#22c55e",
+    "Híbrido":    "#f59e0b",
+    "Prefixado":  "#3b82f6",
+    "Renda+":     "#ec4899",
+    "Educa+":     "#a78bfa",
+    "Outro":      "#94a3b8",
+  };
+
+  let allTitulos = [];
+  let filtroAtivo = "Todos";
+  let tituloSelecionado = null;
+
+  // ── Tabela regressiva IR Tesouro Direto ──
+  function calcularIR(diasAteVencimento) {
+    if (diasAteVencimento <= 180) return 0.225;
+    if (diasAteVencimento <= 360) return 0.20;
+    if (diasAteVencimento <= 720) return 0.175;
+    return 0.15;
+  }
+
+  function diasEntre(dataStr) {
+    const [d, m, a] = dataStr.split("/").map(Number);
+    const venc = new Date(a, m - 1, d);
+    const hoje = new Date();
+    return Math.max(0, Math.round((venc - hoje) / 86400000));
+  }
+
+  function anos(dias) { return dias / 365; }
+
+  function brl(v) {
+    return "R$ " + v.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  // ── Carregar dados ──
+  async function carregar() {
+    try {
+      const res = await fetch("http://localhost:5000/api/titulos");
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      allTitulos = data.titulos;
+      renderStats(data);
+      renderFilters(data.titulos);
+      renderCards(data.titulos);
+      document.getElementById("badge-data").innerHTML = `Ref. <strong>${data.data_referencia}</strong>`;
+    } catch {
+      document.getElementById("content").innerHTML =
+        `<div class="state"><span>⚠️ Não foi possível conectar ao servidor.<br>Certifique-se que o <code>app.py</code> está rodando.</span></div>`;
+    }
+  }
+
+  function renderStats(data) {
+    const contagem = {};
+    data.titulos.forEach(t => { contagem[t.classificacao] = (contagem[t.classificacao] || 0) + 1; });
+    const items = [
+      { label: "Total de títulos", value: data.total, color: "#6c63ff" },
+      ...Object.entries(contagem).map(([k, v]) => ({ label: k, value: v, color: CORES[k] || "#94a3b8" }))
+    ];
+    document.getElementById("stats").innerHTML = items.map(i =>
+      `<div class="stat-card"><div class="label">${i.label}</div><div class="value" style="color:${i.color}">${i.value}</div></div>`
+    ).join("");
+  }
+
+  function renderFilters(titulos) {
+    const classes = ["Todos", ...new Set(titulos.map(t => t.classificacao))];
+    document.getElementById("filters").innerHTML = classes.map(c =>
+      `<button class="filter-btn ${c === filtroAtivo ? 'active' : ''}" onclick="setFiltro('${c}')">${c}</button>`
+    ).join("");
+  }
+
+  function setFiltro(c) {
+    filtroAtivo = c;
+    renderFilters(allTitulos);
+    renderCards(c === "Todos" ? allTitulos : allTitulos.filter(t => t.classificacao === c));
+  }
+
+  function renderCards(titulos) {
+    const grupos = {};
+    titulos.forEach(t => { if (!grupos[t.classificacao]) grupos[t.classificacao] = []; grupos[t.classificacao].push(t); });
+
+    if (!Object.keys(grupos).length) {
+      document.getElementById("content").innerHTML = `<div class="state"><span>Nenhum título encontrado.</span></div>`;
+      return;
+    }
+
+    document.getElementById("content").innerHTML = Object.entries(grupos).map(([classe, items]) => `
+      <div class="group">
+        <div class="section-title" style="color:${CORES[classe] || '#94a3b8'}">${classe}</div>
+        <div class="cards">${items.map(card).join("")}</div>
+      </div>
+    `).join("");
+  }
+
+  function tagClass(classificacao) {
+    if (classificacao.includes("Pós")) return "tag-Pós-fixado";
+    if (classificacao.includes("Renda")) return "tag-Renda";
+    if (classificacao.includes("Educa")) return "tag-Educa";
+    if (classificacao.includes("Híbrido")) return "tag-Híbrido";
+    return "tag-Prefixado";
+  }
+
+  function card(t) {
+    const taxaStr = t.taxa_venda != null ? `${t.taxa_venda.toFixed(2)}% a.a.` : "—";
+    const puStr   = t.pu_venda  != null ? brl(t.pu_venda) : "—";
+    const color   = CORES[t.classificacao] || "#94a3b8";
+    const idx     = allTitulos.indexOf(t);
+
+    return `
+      <div class="card" style="border-left: 3px solid ${color}30" onclick="abrirModal(${idx})">
+        <div class="card-top">
+          <div>
+            <div class="card-tipo">${t.tipo}</div>
+            <div class="card-venc">Venc. ${t.vencimento}</div>
+          </div>
+          <span class="tag ${tagClass(t.classificacao)}">${t.classificacao}</span>
+        </div>
+        <div class="divider"></div>
+        <div class="card-metrics">
+          <div class="metric"><div class="label">Taxa de venda</div><div class="val val-taxa">${taxaStr}</div></div>
+          <div class="metric"><div class="label">Preço unitário</div><div class="val val-pu">${puStr}</div></div>
+        </div>
+        <button class="card-simular">📊 Simular investimento</button>
+      </div>
+    `;
+  }
+
+  // ── Modal ──
+  function abrirModal(idx) {
+    tituloSelecionado = allTitulos[idx];
+    const t = tituloSelecionado;
+    const dias = diasEntre(t.vencimento);
+    const anos_ = (dias / 365).toFixed(1);
+    const meses = Math.round(dias / 30);
+    const color = CORES[t.classificacao] || "#94a3b8";
+
+    document.getElementById("m-titulo").textContent = t.tipo;
+    document.getElementById("m-sub").textContent = `Vencimento: ${t.vencimento} · ${t.classificacao}`;
+    document.getElementById("m-taxa").textContent = t.taxa_venda != null ? `${t.taxa_venda.toFixed(2)}%` : "—";
+    document.getElementById("m-pu").textContent = t.pu_venda != null ? brl(t.pu_venda) : "—";
+    document.getElementById("m-prazo").textContent = meses >= 24 ? `${anos_} anos` : `${meses} meses`;
+    document.getElementById("m-taxa").style.color = color;
+
+    document.getElementById("input-valor").value = "";
+    document.getElementById("resultado").classList.remove("show");
+
+    document.getElementById("modal-overlay").classList.add("open");
+    setTimeout(() => document.getElementById("input-valor").focus(), 200);
+  }
+
+  function fecharModalDireto() {
+    document.getElementById("modal-overlay").classList.remove("open");
+  }
+
+  function fecharModal(e) {
+    if (e.target === document.getElementById("modal-overlay")) fecharModalDireto();
+  }
+
+  document.addEventListener("keydown", e => { if (e.key === "Escape") fecharModalDireto(); });
+
+  // ── Simulador ──
+  function simular() {
+    const t = tituloSelecionado;
+    const valor = parseFloat(document.getElementById("input-valor").value);
+
+    if (!valor || valor <= 0 || !t.taxa_venda) {
+      document.getElementById("resultado").classList.remove("show");
+      return;
+    }
+
+    const dias = diasEntre(t.vencimento);
+    const anosAteVenc = dias / 365;
+    const taxa = t.taxa_venda / 100;
+
+    // Juros compostos
+    const valorBruto = valor * Math.pow(1 + taxa, anosAteVenc);
+    const rendimento = valorBruto - valor;
+
+    // IR tabela regressiva
+    const aliquota = calcularIR(dias);
+    const ir = rendimento * aliquota;
+    const liquido = valorBruto - ir;
+
+    // Alíquota descritiva
+    const aliqDesc = `${(aliquota * 100).toFixed(1)}%`;
+
+    // Aviso para pós-fixado e híbrido
+    let aviso = "";
+    if (t.classificacao === "Pós-fixado")
+      aviso = "⚠️ Tesouro Selic: simulação com taxa atual. O rendimento real varia conforme a Selic futura.";
+    else if (t.classificacao === "Híbrido")
+      aviso = "⚠️ IPCA+: simulação com taxa real atual. O rendimento final inclui correção pelo IPCA, que não está projetado aqui.";
+
+    document.getElementById("r-investido").textContent  = brl(valor);
+    document.getElementById("r-bruto").textContent      = brl(valorBruto);
+    document.getElementById("r-rendimento").textContent = `+ ${brl(rendimento)} (+${((rendimento/valor)*100).toFixed(1)}%)`;
+    document.getElementById("r-aliquota").textContent   = aliqDesc;
+    document.getElementById("r-ir").textContent         = `- ${brl(ir)}`;
+    document.getElementById("r-liquido").textContent    = brl(liquido);
+    document.getElementById("r-aviso").textContent      = aviso;
+
+    document.getElementById("resultado").classList.add("show");
+  }
+
+  carregar();
+</script>
+</body>
+</html>
