@@ -1,12 +1,11 @@
-from flask import Flask, jsonify
-from flask_cors import CORS
+from flask import Flask, jsonify, send_from_directory
 import requests
 import csv
 import io
+import os
 from datetime import datetime
 
-app = Flask(__name__)
-CORS(app)
+app = Flask(__name__, static_folder=".")
 
 CSV_URL = (
     "https://www.tesourotransparente.gov.br/ckan/dataset/"
@@ -38,6 +37,11 @@ def parse_br_date(value):
         return datetime.strptime(value.strip(), "%d/%m/%Y")
     except Exception:
         return None
+
+
+@app.route("/")
+def index():
+    return send_from_directory(".", "index.html")
 
 
 @app.route("/api/titulos")
@@ -79,4 +83,5 @@ def titulos():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(debug=False, host="0.0.0.0", port=port)

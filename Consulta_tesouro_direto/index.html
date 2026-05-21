@@ -341,7 +341,7 @@
   // ── Carregar dados ──
   async function carregar() {
     try {
-      const res = await fetch("http://localhost:5000/api/titulos");
+      const res = await fetch("/api/titulos");
       if (!res.ok) throw new Error();
       const data = await res.json();
       allTitulos = data.titulos;
